@@ -130,6 +130,15 @@ double determinant(float** array, unsigned int size)
     return opr;
 }
 
+void destroy(float** matrix, unsigned int rows)
+{
+    for (unsigned int i = 0; i < rows; ++i)
+    {
+        delete[] matrix[i];
+    }
+    delete[] matrix;
+}
+
 float** reverse(float**& matrix, float** matrix1, int rows)
 {
     if (determinant(matrix1, rows) != 0)
@@ -166,34 +175,17 @@ float** reverse(float**& matrix, float** matrix1, int rows)
                 for (int k = rows - 1; k > j; k--)
                 {
                     result += matrix1[j][k] * matrix[k][i];
-                    if (matrix1[j][j] == 0)
-                    {
-                        for (i = 0; i < rows; i++)
-                        {
-                            delete[] matrix[i];
-                        }
-                        delete[] matrix;
-                    }
                 }
                 matrix[j][i] = (matrix[j][i] - result) / matrix1[j][j];
             }
         }
         return matrix;
+        destroy(matrix, rows);
     }
     else
     {
         cout << "There is no reverse matrix" << endl;
-        exit(0);
     }
-}
-
-void destroy(float** matrix, unsigned int rows)
-{
-    for (unsigned int i = 0; i < rows; ++i)
-    {
-        delete[] matrix[i];
-    }
-    delete[] matrix;
 }
 
 void write(ostream& stream, float** matrix, unsigned int rows, unsigned int columns)
@@ -220,7 +212,7 @@ int main()
 {
     unsigned int rows1 = 0, rows2 = 0, columns1 = 0, columns2 = 0;
     char op;
-    float** matrix1 = new float*[rows1];
+    float** matrix1 = nullptr;
     float** matrix;
     if (read(matrix1, rows1, columns1))
     {
@@ -233,7 +225,7 @@ int main()
         else if (op == '+' && rows1 == columns1)
         {
             cin.get();
-            float** matrix2 = new float*[rows2];
+            float** matrix2 = nullptr;
             read(matrix2, rows2, columns2);
             if (rows1 == rows2 && columns2 == columns1)
             {
