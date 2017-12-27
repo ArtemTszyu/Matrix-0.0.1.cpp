@@ -31,10 +31,13 @@ bool file_name(string &file) {
 float** read_file(unsigned int &rows, unsigned int &columns, string file) {
 	float** matrix = nullptr;
     char op;
-    ifstream input;
-    input.open(file.c_str());
-    if ( !input.is_open() ) {
-        string  string;
+    ifstream input;                 //создаем объект для считывания информации с файла
+    input.open(file.c_str());       //открываем файл
+    if ( !input.is_open() ) {       //провереяем, открылся ли файл (is_open возвращает истину, если файл открылся и ложь, если нет)
+        cout << "Error";
+        return nullptr;
+           }
+    else {string  string;
         getline(input,  string);
         istringstream stream( string);
         if (stream >> rows && stream >> op && op == ',' && stream >> columns) {
@@ -42,15 +45,11 @@ float** read_file(unsigned int &rows, unsigned int &columns, string file) {
             for (unsigned int i = 0; i < rows; i++) {
                 for (unsigned int j = 0; j < columns; j++) {
                     input >> matrix[i][j];
-                }
-            }
+             }
+           }
         }
     }
-    else {
-        cout << "Error";
-        return nullptr;
-    }
-    input.close();
+    input.close();   //закрываем файл
     return matrix;
 }
 
